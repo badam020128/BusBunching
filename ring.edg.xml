@@ -1,37 +1,25 @@
 <edges>
-    <!-- Negyed 0 -->
-    <edge id="e0_pre" from="n0" to="s0_in" priority="1" numLanes="2" speed="13.89" shape="500.00,0.00 497.26,52.26 489.07,103.96 475.53,154.51 456.77,203.37 433.01,250.00 404.51,293.89 371.57,334.57 353.55,353.55"/>
-    <edge id="bay_0" from="s0_in" to="s0_out" priority="1" numLanes="3" speed="13.89">
-        <lane index="0" allow="bus"/>
-        <lane index="1" disallow="rail_urban rail_fast ship"/>
-        <lane index="2" disallow="rail_urban rail_fast ship"/>
-    </edge>
-    <edge id="e0_post" from="s0_out" to="n1" priority="1" numLanes="2" speed="13.89" shape="334.57,371.57 293.89,404.51 250.00,433.01 203.37,456.77 154.51,475.53 103.96,489.07 52.26,497.26 0.00,500.00"/>
+    <!-- 0. Negyed -->
+    <edge id="e0_1" from="n0" to="b0_in" priority="1" numLanes="2" speed="13.89" shape="500.00,0.00 497.26,52.26 489.07,103.96 475.53,154.51 456.77,203.37 433.01,250.00 404.51,293.89 371.57,334.57"/>
+    <edge id="e0_main" from="b0_in" to="b0_out" priority="1" numLanes="2" speed="13.89" shape="371.57,334.57 353.55,353.55 334.57,371.57"/>
+    <edge id="bay_0" from="b0_in" to="b0_out" priority="1" numLanes="1" speed="8.33" shape="371.57,334.57 360.00,360.00 334.57,371.57" spreadType="right"/>
+    <edge id="e0_2" from="b0_out" to="n1" priority="1" numLanes="2" speed="13.89" shape="334.57,371.57 293.89,404.51 250.00,433.01 203.37,456.77 154.51,475.53 103.96,489.07 52.26,497.26 0.00,500.00"/>
 
-    <!-- Negyed 1 -->
-    <edge id="e1_pre" from="n1" to="s1_in" priority="1" numLanes="2" speed="13.89" shape="0.00,500.00 -52.26,497.26 -103.96,489.07 -154.51,475.53 -203.37,456.77 -250.00,433.01 -293.89,404.51 -334.57,371.57 -353.55,353.55"/>
-    <edge id="bay_1" from="s1_in" to="s1_out" priority="1" numLanes="3" speed="13.89">
-        <lane index="0" allow="bus"/>
-        <lane index="1" disallow="rail_urban rail_fast ship"/>
-        <lane index="2" disallow="rail_urban rail_fast ship"/>
-    </edge>
-    <edge id="e1_post" from="s1_out" to="n2" priority="1" numLanes="2" speed="13.89" shape="-371.57,334.57 -404.51,293.89 -433.01,250.00 -456.77,203.37 -475.53,154.51 -489.07,103.96 -497.26,52.26 -500.00,0.00"/>
+    <!-- 1. Negyed -->
+    <edge id="e1_1" from="n1" to="b1_in" priority="1" numLanes="2" speed="13.89" shape="0.00,500.00 -52.26,497.26 -103.96,489.07 -154.51,475.53 -203.37,456.77 -250.00,433.01 -293.89,404.51 -334.57,371.57"/>
+    <edge id="e1_main" from="b1_in" to="b1_out" priority="1" numLanes="2" speed="13.89" shape="-334.57,371.57 -353.55,353.55 -371.57,334.57"/>
+    <edge id="bay_1" from="b1_in" to="b1_out" priority="1" numLanes="1" speed="8.33" shape="-334.57,371.57 -360.00,360.00 -371.57,334.57" spreadType="right"/>
+    <edge id="e1_2" from="b1_out" to="n2" priority="1" numLanes="2" speed="13.89" shape="-371.57,334.57 -404.51,293.89 -433.01,250.00 -456.77,203.37 -475.53,154.51 -489.07,103.96 -497.26,52.26 -500.00,0.00"/>
 
-    <!-- Negyed 2 -->
-    <edge id="e2_pre" from="n2" to="s2_in" priority="1" numLanes="2" speed="13.89" shape="-500.00,0.00 -497.26,-52.26 -489.07,-103.96 -475.53,-154.51 -456.77,-203.37 -433.01,-250.00 -404.51,-293.89 -371.57,-334.57 -353.55,-353.55"/>
-    <edge id="bay_2" from="s2_in" to="s2_out" priority="1" numLanes="3" speed="13.89">
-        <lane index="0" allow="bus"/>
-        <lane index="1" disallow="rail_urban rail_fast ship"/>
-        <lane index="2" disallow="rail_urban rail_fast ship"/>
-    </edge>
-    <edge id="e2_post" from="s2_out" to="n3" priority="1" numLanes="2" speed="13.89" shape="-334.57,-371.57 -293.89,-404.51 -250.00,-433.01 -203.37,-456.77 -154.51,-475.53 -103.96,-489.07 -52.26,-497.26 0.00,-500.00"/>
+    <!-- 2. Negyed -->
+    <edge id="e2_1" from="n2" to="b2_in" priority="1" numLanes="2" speed="13.89" shape="-500.00,0.00 -497.26,-52.26 -489.07,-103.96 -475.53,-154.51 -456.77,-203.37 -433.01,-250.00 -404.51,-293.89 -371.57,-334.57"/>
+    <edge id="e2_main" from="b2_in" to="b2_out" priority="1" numLanes="2" speed="13.89" shape="-371.57,-334.57 -353.55,-353.55 -334.57,-371.57"/>
+    <edge id="bay_2" from="b2_in" to="b2_out" priority="1" numLanes="1" speed="8.33" shape="-371.57,-334.57 -360.00,-360.00 -334.57,-371.57" spreadType="right"/>
+    <edge id="e2_2" from="b2_out" to="n3" priority="1" numLanes="2" speed="13.89" shape="-334.57,-371.57 -293.89,-404.51 -250.00,-433.01 -203.37,-456.77 -154.51,-475.53 -103.96,-489.07 -52.26,-497.26 0.00,-500.00"/>
 
-    <!-- Negyed 3 -->
-    <edge id="e3_pre" from="n3" to="s3_in" priority="1" numLanes="2" speed="13.89" shape="0.00,-500.00 52.26,-497.26 103.96,-489.07 154.51,-475.53 203.37,-456.77 250.00,-433.01 293.89,-404.51 334.57,-371.57 353.55,-353.55"/>
-    <edge id="bay_3" from="s3_in" to="s3_out" priority="1" numLanes="3" speed="13.89">
-        <lane index="0" allow="bus"/>
-        <lane index="1" disallow="rail_urban rail_fast ship"/>
-        <lane index="2" disallow="rail_urban rail_fast ship"/>
-    </edge>
-    <edge id="e3_post" from="s3_out" to="n0" priority="1" numLanes="2" speed="13.89" shape="371.57,-334.57 404.51,-293.89 433.01,-250.00 456.77,-203.37 475.53,-154.51 489.07,-103.96 497.26,-52.26 500.00,0.00"/>
+    <!-- 3. Negyed -->
+    <edge id="e3_1" from="n3" to="b3_in" priority="1" numLanes="2" speed="13.89" shape="0.00,-500.00 52.26,-497.26 103.96,-489.07 154.51,-475.53 203.37,-456.77 250.00,-433.01 293.89,-404.51 334.57,-371.57"/>
+    <edge id="e3_main" from="b3_in" to="b3_out" priority="1" numLanes="2" speed="13.89" shape="334.57,-371.57 353.55,-353.55 371.57,-334.57"/>
+    <edge id="bay_3" from="b3_in" to="b3_out" priority="1" numLanes="1" speed="8.33" shape="334.57,-371.57 360.00,-360.00 371.57,-334.57" spreadType="right"/>
+    <edge id="e3_2" from="b3_out" to="n0" priority="1" numLanes="2" speed="13.89" shape="371.57,-334.57 404.51,-293.89 433.01,-250.00 456.77,-203.37 475.53,-154.51 489.07,-103.96 497.26,-52.26 500.00,0.00"/>
 </edges>

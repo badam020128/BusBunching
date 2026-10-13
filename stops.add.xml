@@ -1,6 +1,6 @@
 <additional>
-    <busStop id="stop_0" lane="bay_0_0" startPos="1" endPos="-1" name="Megallo 1"/>
-    <busStop id="stop_1" lane="bay_1_0" startPos="1" endPos="-1" name="Megallo 2"/>
-    <busStop id="stop_2" lane="bay_2_0" startPos="1" endPos="-1" name="Megallo 3"/>
-    <busStop id="stop_3" lane="bay_3_0" startPos="1" endPos="-1" name="Megallo 4"/>
+    <busStop id="stop_0" lane="bay_0_0" startPos="5" endPos="-5" name="Megallo 1"/>
+    <busStop id="stop_1" lane="bay_1_0" startPos="5" endPos="-5" name="Megallo 2"/>
+    <busStop id="stop_2" lane="bay_2_0" startPos="5" endPos="-5" name="Megallo 3"/>
+    <busStop id="stop_3" lane="bay_3_0" startPos="5" endPos="-5" name="Megallo 4"/>
 </additional>
