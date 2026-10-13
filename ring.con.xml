@@ -1,0 +1,41 @@
+<connections>
+    <!-- Negyed 0 -->
+    <connection from="e0_pre" to="bay_0" fromLane="0" toLane="0"/>
+    <connection from="e0_pre" to="bay_0" fromLane="0" toLane="1"/>
+    <connection from="e0_pre" to="bay_0" fromLane="1" toLane="2"/>
+    <connection from="bay_0" to="e0_post" fromLane="0" toLane="0"/>
+    <connection from="bay_0" to="e0_post" fromLane="1" toLane="0"/>
+    <connection from="bay_0" to="e0_post" fromLane="2" toLane="1"/>
+    <connection from="e0_post" to="e1_pre" fromLane="0" toLane="0"/>
+    <connection from="e0_post" to="e1_pre" fromLane="1" toLane="1"/>
+
+    <!-- Negyed 1 -->
+    <connection from="e1_pre" to="bay_1" fromLane="0" toLane="0"/>
+    <connection from="e1_pre" to="bay_1" fromLane="0" toLane="1"/>
+    <connection from="e1_pre" to="bay_1" fromLane="1" toLane="2"/>
+    <connection from="bay_1" to="e1_post" fromLane="0" toLane="0"/>
+    <connection from="bay_1" to="e1_post" fromLane="1" toLane="0"/>
+    <connection from="bay_1" to="e1_post" fromLane="2" toLane="1"/>
+    <connection from="e1_post" to="e2_pre" fromLane="0" toLane="0"/>
+    <connection from="e1_post" to="e2_pre" fromLane="1" toLane="1"/>
+
+    <!-- Negyed 2 -->
+    <connection from="e2_pre" to="bay_2" fromLane="0" toLane="0"/>
+    <connection from="e2_pre" to="bay_2" fromLane="0" toLane="1"/>
+    <connection from="e2_pre" to="bay_2" fromLane="1" toLane="2"/>
+    <connection from="bay_2" to="e2_post" fromLane="0" toLane="0"/>
+    <connection from="bay_2" to="e2_post" fromLane="1" toLane="0"/>
+    <connection from="bay_2" to="e2_post" fromLane="2" toLane="1"/>
+    <connection from="e2_post" to="e3_pre" fromLane="0" toLane="0"/>
+    <connection from="e2_post" to="e3_pre" fromLane="1" toLane="1"/>
+
+    <!-- Negyed 3 -->
+    <connection from="e3_pre" to="bay_3" fromLane="0" toLane="0"/>
+    <connection from="e3_pre" to="bay_3" fromLane="0" toLane="1"/>
+    <connection from="e3_pre" to="bay_3" fromLane="1" toLane="2"/>
+    <connection from="bay_3" to="e3_post" fromLane="0" toLane="0"/>
+    <connection from="bay_3" to="e3_post" fromLane="1" toLane="0"/>
+    <connection from="bay_3" to="e3_post" fromLane="2" toLane="1"/>
+    <connection from="e3_post" to="e0_pre" fromLane="0" toLane="0"/>
+    <connection from="e3_post" to="e0_pre" fromLane="1" toLane="1"/>
+</connections>

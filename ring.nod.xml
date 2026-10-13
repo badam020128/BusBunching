@@ -1,6 +1,17 @@
 <nodes>
     <node id="n0" x="500.00" y="0.00" type="priority"/>
+    <node id="s0_in" x="353.55" y="353.55" type="priority"/>
+    <node id="s0_out" x="334.57" y="371.57" type="priority"/>
+
     <node id="n1" x="0.00" y="500.00" type="priority"/>
+    <node id="s1_in" x="-353.55" y="353.55" type="priority"/>
+    <node id="s1_out" x="-371.57" y="334.57" type="priority"/>
+
     <node id="n2" x="-500.00" y="0.00" type="priority"/>
+    <node id="s2_in" x="-353.55" y="-353.55" type="priority"/>
+    <node id="s2_out" x="-334.57" y="-371.57" type="priority"/>
+
     <node id="n3" x="0.00" y="-500.00" type="priority"/>
+    <node id="s3_in" x="353.55" y="-353.55" type="priority"/>
+    <node id="s3_out" x="371.57" y="-334.57" type="priority"/>
 </nodes>
