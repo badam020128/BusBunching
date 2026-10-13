@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!-- generated on 2026-10-13T15:04:46.353270+01:00 by Eclipse SUMO netconvert 1.28.0
+<!-- generated on 2026-10-13T17:22:48.597244+01:00 by Eclipse SUMO netconvert 1.28.0
 <netconvertConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
 
     <input>
@@ -164,7 +164,7 @@
         <request index="2" response="000" foes="000" cont="0"/>
     </junction>
     <junction id="b0_out" type="priority" x="834.57" y="871.57" incLanes="bay_0_0 e0_main_0 e0_main_1" intLanes=":b0_out_0_0 :b0_out_1_0 :b0_out_1_1" shape="841.53,871.92 838.26,868.07 832.20,873.49 836.22,878.47 838.20,875.98 838.67,874.85 839.18,873.80 840.03,872.83">
-        <request index="0" response="010" foes="010" cont="0"/>
+        <request index="0" response="000" foes="010" cont="0"/>
         <request index="1" response="000" foes="001" cont="0"/>
         <request index="2" response="000" foes="000" cont="0"/>
     </junction>
@@ -174,7 +174,7 @@
         <request index="2" response="000" foes="000" cont="0"/>
     </junction>
     <junction id="b1_out" type="priority" x="128.43" y="834.57" incLanes="bay_1_0 e1_main_0 e1_main_1" intLanes=":b1_out_0_0 :b1_out_1_0 :b1_out_1_1" shape="128.08,841.53 131.93,838.26 126.51,832.20 121.53,836.22 124.02,838.20 125.15,838.67 126.20,839.18 127.17,840.03">
-        <request index="0" response="010" foes="010" cont="0"/>
+        <request index="0" response="000" foes="010" cont="0"/>
         <request index="1" response="000" foes="001" cont="0"/>
         <request index="2" response="000" foes="000" cont="0"/>
     </junction>
@@ -184,7 +184,7 @@
         <request index="2" response="000" foes="000" cont="0"/>
     </junction>
     <junction id="b2_out" type="priority" x="165.43" y="128.43" incLanes="bay_2_0 e2_main_0 e2_main_1" intLanes=":b2_out_0_0 :b2_out_1_0 :b2_out_1_1" shape="167.80,126.51 163.78,121.53 161.80,124.02 161.33,125.15 160.82,126.20 159.97,127.17 158.47,128.08 161.74,131.93">
-        <request index="0" response="010" foes="010" cont="0"/>
+        <request index="0" response="000" foes="010" cont="0"/>
         <request index="1" response="000" foes="001" cont="0"/>
         <request index="2" response="000" foes="000" cont="0"/>
     </junction>
@@ -194,7 +194,7 @@
         <request index="2" response="000" foes="000" cont="0"/>
     </junction>
     <junction id="b3_out" type="priority" x="871.57" y="165.43" incLanes="bay_3_0 e3_main_0 e3_main_1" intLanes=":b3_out_0_0 :b3_out_1_0 :b3_out_1_1" shape="873.49,167.80 878.47,163.78 875.98,161.80 874.85,161.33 873.80,160.82 872.83,159.97 871.92,158.47 868.07,161.74">
-        <request index="0" response="010" foes="010" cont="0"/>
+        <request index="0" response="000" foes="010" cont="0"/>
         <request index="1" response="000" foes="001" cont="0"/>
         <request index="2" response="000" foes="000" cont="0"/>
     </junction>
@@ -215,10 +215,10 @@
         <request index="1" response="00" foes="00" cont="0"/>
     </junction>
 
-    <connection from="bay_0" to="e0_2" fromLane="0" toLane="0" via=":b0_out_0_0" dir="s" state="m" visibility="9.00"/>
-    <connection from="bay_1" to="e1_2" fromLane="0" toLane="0" via=":b1_out_0_0" dir="s" state="m" visibility="9.00"/>
-    <connection from="bay_2" to="e2_2" fromLane="0" toLane="0" via=":b2_out_0_0" dir="s" state="m" visibility="9.00"/>
-    <connection from="bay_3" to="e3_2" fromLane="0" toLane="0" via=":b3_out_0_0" dir="s" state="m" visibility="9.00"/>
+    <connection from="bay_0" to="e0_2" fromLane="0" toLane="0" pass="1" via=":b0_out_0_0" dir="s" state="M"/>
+    <connection from="bay_1" to="e1_2" fromLane="0" toLane="0" pass="1" via=":b1_out_0_0" dir="s" state="M"/>
+    <connection from="bay_2" to="e2_2" fromLane="0" toLane="0" pass="1" via=":b2_out_0_0" dir="s" state="M"/>
+    <connection from="bay_3" to="e3_2" fromLane="0" toLane="0" pass="1" via=":b3_out_0_0" dir="s" state="M"/>
     <connection from="e0_1" to="bay_0" fromLane="0" toLane="0" via=":b0_in_0_0" dir="R" state="M"/>
     <connection from="e0_1" to="e0_main" fromLane="0" toLane="0" via=":b0_in_1_0" dir="s" state="M"/>
     <connection from="e0_1" to="e0_main" fromLane="1" toLane="1" via=":b0_in_1_1" dir="s" state="M"/>

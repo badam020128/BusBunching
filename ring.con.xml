@@ -3,7 +3,7 @@
     <connection from="e0_1" to="e0_main" fromLane="0" toLane="0"/>
     <connection from="e0_1" to="e0_main" fromLane="1" toLane="1"/>
     <connection from="e0_1" to="bay_0"   fromLane="0" toLane="0"/>
-    <connection from="bay_0" to="e0_2"   fromLane="0" toLane="0"/>
+    <connection from="bay_0" to="e0_2"   fromLane="0" toLane="0" pass="true"/>
     <connection from="e0_main" to="e0_2" fromLane="0" toLane="0"/>
     <connection from="e0_main" to="e0_2" fromLane="1" toLane="1"/>
     <connection from="e0_2" to="e1_1"    fromLane="0" toLane="0"/>
@@ -13,7 +13,7 @@
     <connection from="e1_1" to="e1_main" fromLane="0" toLane="0"/>
     <connection from="e1_1" to="e1_main" fromLane="1" toLane="1"/>
     <connection from="e1_1" to="bay_1"   fromLane="0" toLane="0"/>
-    <connection from="bay_1" to="e1_2"   fromLane="0" toLane="0"/>
+    <connection from="bay_1" to="e1_2"   fromLane="0" toLane="0" pass="true"/>
     <connection from="e1_main" to="e1_2" fromLane="0" toLane="0"/>
     <connection from="e1_main" to="e1_2" fromLane="1" toLane="1"/>
     <connection from="e1_2" to="e2_1"    fromLane="0" toLane="0"/>
@@ -23,7 +23,7 @@
     <connection from="e2_1" to="e2_main" fromLane="0" toLane="0"/>
     <connection from="e2_1" to="e2_main" fromLane="1" toLane="1"/>
     <connection from="e2_1" to="bay_2"   fromLane="0" toLane="0"/>
-    <connection from="bay_2" to="e2_2"   fromLane="0" toLane="0"/>
+    <connection from="bay_2" to="e2_2"   fromLane="0" toLane="0" pass="true"/>
     <connection from="e2_main" to="e2_2" fromLane="0" toLane="0"/>
     <connection from="e2_main" to="e2_2" fromLane="1" toLane="1"/>
     <connection from="e2_2" to="e3_1"    fromLane="0" toLane="0"/>
@@ -33,7 +33,7 @@
     <connection from="e3_1" to="e3_main" fromLane="0" toLane="0"/>
     <connection from="e3_1" to="e3_main" fromLane="1" toLane="1"/>
     <connection from="e3_1" to="bay_3"   fromLane="0" toLane="0"/>
-    <connection from="bay_3" to="e3_2"   fromLane="0" toLane="0"/>
+    <connection from="bay_3" to="e3_2"   fromLane="0" toLane="0" pass="true"/>
     <connection from="e3_main" to="e3_2" fromLane="0" toLane="0"/>
     <connection from="e3_main" to="e3_2" fromLane="1" toLane="1"/>
     <connection from="e3_2" to="e0_1"    fromLane="0" toLane="0"/>
