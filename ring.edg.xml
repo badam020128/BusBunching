@@ -1,25 +1,49 @@
 <edges>
-    <!-- 0. Negyed -->
-    <edge id="e0_1" from="n0" to="b0_in" priority="1" numLanes="2" speed="13.89" shape="500.00,0.00 497.26,52.26 489.07,103.96 475.53,154.51 456.77,203.37 433.01,250.00 404.51,293.89 371.57,334.57"/>
-    <edge id="e0_main" from="b0_in" to="b0_out" priority="1" numLanes="2" speed="13.89" shape="371.57,334.57 353.55,353.55 334.57,371.57"/>
-    <edge id="bay_0" from="b0_in" to="b0_out" priority="1" numLanes="1" speed="8.33" shape="371.57,334.57 360.00,360.00 334.57,371.57" spreadType="right"/>
-    <edge id="e0_2" from="b0_out" to="n1" priority="1" numLanes="2" speed="13.89" shape="334.57,371.57 293.89,404.51 250.00,433.01 203.37,456.77 154.51,475.53 103.96,489.07 52.26,497.26 0.00,500.00"/>
+	<!-- 0. szektor -->
+	<edge id="e0_1" from="n0" to="b0_in" priority="1" numLanes="2" speed="13.89" shape="500.00,0.00 498.19,42.47 492.79,84.63 483.82,126.18 471.35,166.82"/>
+	<edge id="e0_main" from="b0_in" to="b0_out" priority="1" numLanes="2" speed="13.89" shape="471.35,166.82 461.94,191.34 451.26,215.33"/>
+	<edge id="bay_0" from="b0_in" to="b0_out" priority="1" numLanes="1" speed="8.33" shape="471.35,166.82 470.35,194.82 451.26,215.33" spreadType="right"/>
+	<edge id="e0_2" from="b0_out" to="n1" priority="1" numLanes="2" speed="13.89" shape="451.26,215.33 431.33,252.89 408.30,288.61 382.31,322.25 353.55,353.55"/>
 
-    <!-- 1. Negyed -->
-    <edge id="e1_1" from="n1" to="b1_in" priority="1" numLanes="2" speed="13.89" shape="0.00,500.00 -52.26,497.26 -103.96,489.07 -154.51,475.53 -203.37,456.77 -250.00,433.01 -293.89,404.51 -334.57,371.57"/>
-    <edge id="e1_main" from="b1_in" to="b1_out" priority="1" numLanes="2" speed="13.89" shape="-334.57,371.57 -353.55,353.55 -371.57,334.57"/>
-    <edge id="bay_1" from="b1_in" to="b1_out" priority="1" numLanes="1" speed="8.33" shape="-334.57,371.57 -360.00,360.00 -371.57,334.57" spreadType="right"/>
-    <edge id="e1_2" from="b1_out" to="n2" priority="1" numLanes="2" speed="13.89" shape="-371.57,334.57 -404.51,293.89 -433.01,250.00 -456.77,203.37 -475.53,154.51 -489.07,103.96 -497.26,52.26 -500.00,0.00"/>
+	<!-- 1. szektor -->
+	<edge id="e1_1" from="n1" to="b1_in" priority="1" numLanes="2" speed="13.89" shape="353.55,353.55 322.25,382.31 288.61,408.30 252.89,431.33 215.33,451.26"/>
+	<edge id="e1_main" from="b1_in" to="b1_out" priority="1" numLanes="2" speed="13.89" shape="215.33,451.26 191.34,461.94 166.82,471.35"/>
+	<edge id="bay_1" from="b1_in" to="b1_out" priority="1" numLanes="1" speed="8.33" shape="215.33,451.26 194.82,470.35 166.82,471.35" spreadType="right"/>
+	<edge id="e1_2" from="b1_out" to="n2" priority="1" numLanes="2" speed="13.89" shape="166.82,471.35 126.18,483.82 84.63,492.79 42.47,498.19 0.00,500.00"/>
 
-    <!-- 2. Negyed -->
-    <edge id="e2_1" from="n2" to="b2_in" priority="1" numLanes="2" speed="13.89" shape="-500.00,0.00 -497.26,-52.26 -489.07,-103.96 -475.53,-154.51 -456.77,-203.37 -433.01,-250.00 -404.51,-293.89 -371.57,-334.57"/>
-    <edge id="e2_main" from="b2_in" to="b2_out" priority="1" numLanes="2" speed="13.89" shape="-371.57,-334.57 -353.55,-353.55 -334.57,-371.57"/>
-    <edge id="bay_2" from="b2_in" to="b2_out" priority="1" numLanes="1" speed="8.33" shape="-371.57,-334.57 -360.00,-360.00 -334.57,-371.57" spreadType="right"/>
-    <edge id="e2_2" from="b2_out" to="n3" priority="1" numLanes="2" speed="13.89" shape="-334.57,-371.57 -293.89,-404.51 -250.00,-433.01 -203.37,-456.77 -154.51,-475.53 -103.96,-489.07 -52.26,-497.26 0.00,-500.00"/>
+	<!-- 2. szektor -->
+	<edge id="e2_1" from="n2" to="b2_in" priority="1" numLanes="2" speed="13.89" shape="0.00,500.00 -42.47,498.19 -84.63,492.79 -126.18,483.82 -166.82,471.35"/>
+	<edge id="e2_main" from="b2_in" to="b2_out" priority="1" numLanes="2" speed="13.89" shape="-166.82,471.35 -191.34,461.94 -215.33,451.26"/>
+	<edge id="bay_2" from="b2_in" to="b2_out" priority="1" numLanes="1" speed="8.33" shape="-166.82,471.35 -194.82,470.35 -215.33,451.26" spreadType="right"/>
+	<edge id="e2_2" from="b2_out" to="n3" priority="1" numLanes="2" speed="13.89" shape="-215.33,451.26 -252.89,431.33 -288.61,408.30 -322.25,382.31 -353.55,353.55"/>
 
-    <!-- 3. Negyed -->
-    <edge id="e3_1" from="n3" to="b3_in" priority="1" numLanes="2" speed="13.89" shape="0.00,-500.00 52.26,-497.26 103.96,-489.07 154.51,-475.53 203.37,-456.77 250.00,-433.01 293.89,-404.51 334.57,-371.57"/>
-    <edge id="e3_main" from="b3_in" to="b3_out" priority="1" numLanes="2" speed="13.89" shape="334.57,-371.57 353.55,-353.55 371.57,-334.57"/>
-    <edge id="bay_3" from="b3_in" to="b3_out" priority="1" numLanes="1" speed="8.33" shape="334.57,-371.57 360.00,-360.00 371.57,-334.57" spreadType="right"/>
-    <edge id="e3_2" from="b3_out" to="n0" priority="1" numLanes="2" speed="13.89" shape="371.57,-334.57 404.51,-293.89 433.01,-250.00 456.77,-203.37 475.53,-154.51 489.07,-103.96 497.26,-52.26 500.00,0.00"/>
+	<!-- 3. szektor -->
+	<edge id="e3_1" from="n3" to="b3_in" priority="1" numLanes="2" speed="13.89" shape="-353.55,353.55 -382.31,322.25 -408.30,288.61 -431.33,252.89 -451.26,215.33"/>
+	<edge id="e3_main" from="b3_in" to="b3_out" priority="1" numLanes="2" speed="13.89" shape="-451.26,215.33 -461.94,191.34 -471.35,166.82"/>
+	<edge id="bay_3" from="b3_in" to="b3_out" priority="1" numLanes="1" speed="8.33" shape="-451.26,215.33 -470.35,194.82 -471.35,166.82" spreadType="right"/>
+	<edge id="e3_2" from="b3_out" to="n4" priority="1" numLanes="2" speed="13.89" shape="-471.35,166.82 -483.82,126.18 -492.79,84.63 -498.19,42.47 -500.00,0.00"/>
+
+	<!-- 4. szektor -->
+	<edge id="e4_1" from="n4" to="b4_in" priority="1" numLanes="2" speed="13.89" shape="-500.00,0.00 -498.19,-42.47 -492.79,-84.63 -483.82,-126.18 -471.35,-166.82"/>
+	<edge id="e4_main" from="b4_in" to="b4_out" priority="1" numLanes="2" speed="13.89" shape="-471.35,-166.82 -461.94,-191.34 -451.26,-215.33"/>
+	<edge id="bay_4" from="b4_in" to="b4_out" priority="1" numLanes="1" speed="8.33" shape="-471.35,-166.82 -470.35,-194.82 -451.26,-215.33" spreadType="right"/>
+	<edge id="e4_2" from="b4_out" to="n5" priority="1" numLanes="2" speed="13.89" shape="-451.26,-215.33 -431.33,-252.89 -408.30,-288.61 -382.31,-322.25 -353.55,-353.55"/>
+
+	<!-- 5. szektor -->
+	<edge id="e5_1" from="n5" to="b5_in" priority="1" numLanes="2" speed="13.89" shape="-353.55,-353.55 -322.25,-382.31 -288.61,-408.30 -252.89,-431.33 -215.33,-451.26"/>
+	<edge id="e5_main" from="b5_in" to="b5_out" priority="1" numLanes="2" speed="13.89" shape="-215.33,-451.26 -191.34,-461.94 -166.82,-471.35"/>
+	<edge id="bay_5" from="b5_in" to="b5_out" priority="1" numLanes="1" speed="8.33" shape="-215.33,-451.26 -194.82,-470.35 -166.82,-471.35" spreadType="right"/>
+	<edge id="e5_2" from="b5_out" to="n6" priority="1" numLanes="2" speed="13.89" shape="-166.82,-471.35 -126.18,-483.82 -84.63,-492.79 -42.47,-498.19 -0.00,-500.00"/>
+
+	<!-- 6. szektor -->
+	<edge id="e6_1" from="n6" to="b6_in" priority="1" numLanes="2" speed="13.89" shape="-0.00,-500.00 42.47,-498.19 84.63,-492.79 126.18,-483.82 166.82,-471.35"/>
+	<edge id="e6_main" from="b6_in" to="b6_out" priority="1" numLanes="2" speed="13.89" shape="166.82,-471.35 191.34,-461.94 215.33,-451.26"/>
+	<edge id="bay_6" from="b6_in" to="b6_out" priority="1" numLanes="1" speed="8.33" shape="166.82,-471.35 194.82,-470.35 215.33,-451.26" spreadType="right"/>
+	<edge id="e6_2" from="b6_out" to="n7" priority="1" numLanes="2" speed="13.89" shape="215.33,-451.26 252.89,-431.33 288.61,-408.30 322.25,-382.31 353.55,-353.55"/>
+
+	<!-- 7. szektor -->
+	<edge id="e7_1" from="n7" to="b7_in" priority="1" numLanes="2" speed="13.89" shape="353.55,-353.55 382.31,-322.25 408.30,-288.61 431.33,-252.89 451.26,-215.33"/>
+	<edge id="e7_main" from="b7_in" to="b7_out" priority="1" numLanes="2" speed="13.89" shape="451.26,-215.33 461.94,-191.34 471.35,-166.82"/>
+	<edge id="bay_7" from="b7_in" to="b7_out" priority="1" numLanes="1" speed="8.33" shape="451.26,-215.33 470.35,-194.82 471.35,-166.82" spreadType="right"/>
+	<edge id="e7_2" from="b7_out" to="n0" priority="1" numLanes="2" speed="13.89" shape="471.35,-166.82 483.82,-126.18 492.79,-84.63 498.19,-42.47 500.00,-0.00"/>
 </edges>

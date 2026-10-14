@@ -6,36 +6,51 @@ import random
 # ==========================================
 SUMO_CMD = ["sumo-gui", "-c", "simulation.sumocfg", "--start"]
 
-CAR_SPAWN_PROB = 0.25
+CAR_SPAWN_PROB = 0.20
 
-BUS_STOPS = ["stop_0", "stop_1", "stop_2", "stop_3"]
-BAY_EDGES = ["bay_0", "bay_1", "bay_2", "bay_3"]
-MAIN_PARALLEL_EDGES = ["e0_main", "e1_main", "e2_main", "e3_main"]
+BUS_STOPS = ["stop_0", "stop_1", "stop_2", "stop_3", "stop_4", "stop_5", "stop_6", "stop_7"]
+BAY_EDGES = ["bay_0", "bay_1", "bay_2", "bay_3", "bay_4", "bay_5", "bay_6", "bay_7"]
+MAIN_PARALLEL_EDGES = ["e0_main", "e1_main", "e2_main", "e3_main", "e4_main", "e5_main", "e6_main", "e7_main"]
 
 # Megállók koordinátái a GUI szöveges kiírásához (POI pozíciók)
 STOP_COORDS = [
-    (345.0, 365.0),    # stop_0
-    (-365.0, 345.0),   # stop_1
-    (-345.0, -365.0),  # stop_2
-    (365.0, -345.0)    # stop_3
+    (970.3, 694.8),   # stop_0 
+    (694.8, 970.3),   # stop_1  
+    (305.2, 970.3),   # stop_2  
+    (29.7, 694.8),    # stop_3  
+    (29.7, 305.2),    # stop_4  
+    (305.2, 29.7),    # stop_5  
+    (694.8, 29.7),    # stop_6  
+    (970.3, 305.2),   # stop_7  
 ]
 
 CAR_LAP_EDGES = [
     "e0_1", "e0_main", "e0_2",
     "e1_1", "e1_main", "e1_2",
     "e2_1", "e2_main", "e2_2",
-    "e3_1", "e3_main", "e3_2"
+    "e3_1", "e3_main", "e3_2",
+    "e4_1", "e4_main", "e4_2",
+    "e5_1", "e5_main", "e5_2",
+    "e6_1", "e6_main", "e6_2",
+    "e7_1", "e7_main", "e7_2"
 ]
 
 BUS_LAP_EDGES = [
     "e0_1", "bay_0", "e0_2",
     "e1_1", "bay_1", "e1_2",
     "e2_1", "bay_2", "e2_2",
-    "e3_1", "bay_3", "e3_2"
+    "e3_1", "bay_3", "e3_2",
+    "e4_1", "bay_4", "e4_2",
+    "e5_1", "bay_5", "e5_2",
+    "e6_1", "bay_6", "e6_2",
+    "e7_1", "bay_7", "e7_2"
 ]
 
 SIGNAL_OFF = 0
 SIGNAL_BLINKER_LEFT = 1
+NUM_BUSES = 8
+MAX_NUMBER = 300 # Maximum jármű szám a szimulációban
+ALIGHT_PROB = 0.33 # Leszállás esélye
 
 # ==========================================
 # UTASMODELL PARAMÉTEREK
@@ -48,6 +63,9 @@ waiting_passengers = {stop: random.randint(2, 6) for stop in BUS_STOPS}
 
 # Buszok megállási állapotának követése {bus_id: {"handling_stop": stop_id, "done": bool}}
 bus_service_state = {}
+
+# Buszonként a fedélzeten lévő utasok száma
+bus_passengers = {f"bus_{i}": 0 for i in range(NUM_BUSES)}
 
 
 def init_gui_overlays():
@@ -88,28 +106,29 @@ def update_passenger_demand():
         traci.poi.setParameter(poi_id, "passengers", str(count))
 
 
-def calculate_dwell_time(passenger_count):
+def calculate_dwell_time(passenger_count, alighting_count=0):
     """
     Kiszámítja a felszállási időt:
-    Fix ajtónyitás (3.0 mp) + utasonként 1.2 mp + egyéni szórás/bizonytalanság.
+    Fix ajtónyitás (3.0 mp) + utasonként 1.2 mp + leszállónként 0.8 mp + egyéni szórás/bizonytalanság.
     """
     door_time = 3.0
     boarding_rate = 1.2  # másodperc/utas
+    alighting_rate = 0.8 # másodperc/leszálló
     random_noise = random.uniform(-1.5, 2.5)
-    
-    total_time = door_time + (passenger_count * boarding_rate) + random_noise
+     
+    total_time = door_time + (passenger_count * boarding_rate) + (alighting_rate * alighting_count) + random_noise
     return max(4.0, round(total_time, 1))
 
 
 # Követjük, hogy melyik busz melyik megállóját konfiguráltuk már
-bus_configured_stops = {f"bus_{i}": None for i in range(3)}
+bus_configured_stops = {f"bus_{i}": None for i in range(NUM_BUSES)}
 
 def handle_bus_boarding(step):
     """
-    Amikor a busz belép az öbölbe, beállítjuk a pontos várakozási időt 
-    a peronon lévő utasok alapján, mielőtt még megállna.
+    Amikor a busz belép az öbölbe, először leszállnak az utasok, utána felszállnak a várakozók
+    és ezek alapján beállítjuk a pontos várakozási időt, mielőtt még megállna a busz.
     """
-    for bus_id in [f"bus_{i}" for i in range(3)]:
+    for bus_id in [f"bus_{i}" for i in range(NUM_BUSES)]:
         if bus_id not in traci.vehicle.getIDList():
             continue
 
@@ -122,8 +141,17 @@ def handle_bus_boarding(step):
 
             # Ha ehhez az öbölhöz még nem állítottuk be az utasok idejét ebben a körben
             if bus_configured_stops[bus_id] != stop_id:
-                passengers = waiting_passengers[stop_id]
-                dwell = calculate_dwell_time(passengers)
+                # leszállás
+                alighting = sum(1 for _ in range(bus_passengers[bus_id])
+                                if random.random() < ALIGHT_PROB)
+                bus_passengers[bus_id] -= alighting
+                
+                # felszállás
+                boarding = waiting_passengers[stop_id]
+                bus_passengers[bus_id] += boarding
+
+                dwell = calculate_dwell_time(boarding, alighting)
+
 
                 # Beállítjuk a megállást a pontos időtartammal
                 traci.vehicle.setBusStop(
@@ -132,8 +160,11 @@ def handle_bus_boarding(step):
                     duration=dwell,
                     flags=0
                 )
+                # Meghatározzuk hányan vannak a buszon
 
-                print(f"[{step}s] {bus_id} érkezik ide: {stop_id} | Várakozó utasok: {passengers} fő -> Megállási idő: {dwell} mp")
+                print(f"[{step}s] {bus_id} érkezik ide: {stop_id} | Leszálló utasok: {alighting} fő | "
+                      f"Felszálló utasok: {boarding} fő | Buszon összes utas: {bus_passengers[bus_id]} "
+                      f"-> Megállási idő: {dwell} mp")
 
                 # Az utasok felszálltak, peron ürül
                 waiting_passengers[stop_id] = 0
@@ -192,9 +223,11 @@ def manage_bus_indicators_and_priority():
 
 def spawn_passenger_car(step):
     """Személyautó hozzáadása."""
+    if traci.simulation.getMinExpectedNumber() >= MAX_NUMBER:
+        return
     if random.random() < CAR_SPAWN_PROB:
         car_id = f"car_{step}"
-        start_idx = random.choice([0, 3, 6, 9])
+        start_idx = random.choice([0, 3, 6, 9, 12, 15, 18, 21])
         car_edges = CAR_LAP_EDGES[start_idx:] + CAR_LAP_EDGES[:start_idx]
         route_id = f"route_car_{step}"
         
@@ -227,25 +260,28 @@ def main():
     traci.vehicletype.setParameter("bus", "jmTimegapMinor", "1.0")
 
     # 2. Útvonalak és buszok
-    traci.route.add("bus_ring_route", BUS_LAP_EDGES * 50)
-
-    num_buses = 3
-    depart_interval = 75
+    num_buses = NUM_BUSES
+    n_stops = len(BUS_STOPS)
 
     for i in range(num_buses):
         bus_id = f"bus_{i}"
-        depart_time = i * depart_interval
+        k = i * n_stops // num_buses   # melyik szektorból indul
+
+        # Útvonal és megállósorrend elforgatva, hogy a k. szektorból induljon
+        edges = BUS_LAP_EDGES[3 * k:] + BUS_LAP_EDGES[:3 * k]
+        stops = BUS_STOPS[k:] + BUS_STOPS[:k]
+
+        route_id = f"bus_route_{i}"
+        traci.route.add(route_id, edges * 50)
         traci.vehicle.add(
             vehID=bus_id,
-            routeID="bus_ring_route",
+            routeID=route_id,
             typeID="bus",
-            depart=str(depart_time),
+            depart="0",
             departLane="0"
         )
-        
-        # Kezdetben egy alapértelmezett megállási listát kapnak, 
-        # amit az érkezéskor dinamikusan felülírunk
-        for stop in BUS_STOPS * 50:
+
+        for stop in stops * 50:
             traci.vehicle.setBusStop(
                 vehID=bus_id,
                 stopID=stop,

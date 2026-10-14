@@ -3,4 +3,8 @@
     <busStop id="stop_1" lane="bay_1_0" startPos="2.0" endPos="22.0" friendlyPos="true" name="Megallo 2"/>
     <busStop id="stop_2" lane="bay_2_0" startPos="2.0" endPos="22.0" friendlyPos="true" name="Megallo 3"/>
     <busStop id="stop_3" lane="bay_3_0" startPos="2.0" endPos="22.0" friendlyPos="true" name="Megallo 4"/>
+	<busStop id="stop_4" lane="bay_4_0" startPos="2.0" endPos="22.0" friendlyPos="true" name="Megallo 5"/>
+	<busStop id="stop_5" lane="bay_5_0" startPos="2.0" endPos="22.0" friendlyPos="true" name="Megallo 6"/>
+	<busStop id="stop_6" lane="bay_6_0" startPos="2.0" endPos="22.0" friendlyPos="true" name="Megallo 7"/>
+	<busStop id="stop_7" lane="bay_7_0" startPos="2.0" endPos="22.0" friendlyPos="true" name="Megallo 8"/>
 </additional>
