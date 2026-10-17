@@ -51,7 +51,7 @@ SIGNAL_BLINKER_LEFT = 1
 NUM_BUSES = 8
 MAX_NUMBER = 300 # Maximum jármű szám a szimulációban
 ALIGHT_PROB = 0.33 # Leszállás esélye
-
+BUS_CAPACITY = 85
 # ==========================================
 # UTASMODELL PARAMÉTEREK
 # ==========================================
@@ -147,7 +147,9 @@ def handle_bus_boarding(step):
                 bus_passengers[bus_id] -= alighting
                 
                 # felszállás
-                boarding = waiting_passengers[stop_id]
+                free_seats = BUS_CAPACITY - bus_passengers[bus_id]
+                boarding = min(waiting_passengers[stop_id], free_seats)
+                left_passengers = waiting_passengers[stop_id] - boarding
                 bus_passengers[bus_id] += boarding
 
                 dwell = calculate_dwell_time(boarding, alighting)
@@ -163,11 +165,11 @@ def handle_bus_boarding(step):
                 # Meghatározzuk hányan vannak a buszon
 
                 print(f"[{step}s] {bus_id} érkezik ide: {stop_id} | Leszálló utasok: {alighting} fő | "
-                      f"Felszálló utasok: {boarding} fő | Buszon összes utas: {bus_passengers[bus_id]} "
-                      f"-> Megállási idő: {dwell} mp")
+                      f"Felszálló utasok: {boarding} fő | Buszon összes utas: {bus_passengers[bus_id]}"
+                      f"|Megállóban maradt: {left_passengers} fő -> Megállási idő: {dwell} mp")
 
                 # Az utasok felszálltak, peron ürül
-                waiting_passengers[stop_id] = 0
+                waiting_passengers[stop_id] = left_passengers
                 bus_configured_stops[bus_id] = stop_id
         else:
             # Amikor elhagyja az öblöt, feloldjuk a zárolást a következő körre
