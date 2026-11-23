@@ -1,6 +1,7 @@
 import traci
 import random
 import argparse
+import csv
 
 # ==========================================
 # BEÁLLÍTÁSOK
@@ -248,6 +249,41 @@ def spawn_passenger_car(step):
         )
         traci.vehicle.setLaneChangeMode(car_id, 0b010101010101)
 
+def record_stop_metrics(writer, active_stops, last_departure):
+    """Naplózza a megállóhelyi megállásokat a SUMO állapota alapján."""
+    now = traci.simulation.getTime()
+
+    for bus_id in traci.vehicle.getIDList():
+        if not bus_id.startswith("bus_"):
+            continue
+
+        edge = traci.vehicle.getRoadID(bus_id)
+        at_stop = edge.startswith("bay_") and bool(
+            traci.vehicle.getStopState(bus_id) & 1
+        )
+
+        if at_stop:
+            if bus_id not in active_stops:
+                stop_id = f"stop_{edge.split('_', 1)[1]}"
+                active_stops[bus_id] = (stop_id, now)
+            continue
+
+        if bus_id not in active_stops:
+            continue
+
+        stop_id, arrival_time = active_stops.pop(bus_id)
+        previous_departure = last_departure.get(stop_id)
+        headway = "" if previous_departure is None else now - previous_departure
+
+        writer.writerow([
+            bus_id,
+            stop_id,
+            arrival_time,
+            now,
+            now - arrival_time,
+            headway,
+        ])
+        last_departure[stop_id] = now
 
 def main():
     parser = argparse.ArgumentParser()
@@ -310,16 +346,36 @@ def main():
 
     # 3. Főciklus
     step = 0
+    active_stops = {}
+    last_departure = {}
+    metrics_path = f"stop_metrics_{'traffic' if traffic_enabled else 'notraffic'}.csv"
+
     try:
-        while traci.simulation.getMinExpectedNumber() > 0:
-            if traffic_enabled:
-                spawn_passenger_car(step)
-            update_passenger_demand()
-            handle_bus_boarding(step)
-            manage_bus_indicators_and_priority()
-            
-            traci.simulationStep()
-            step += 1
+        with open(metrics_path, "w", newline="", encoding="utf-8") as metrics_file:
+            writer = csv.writer(metrics_file)
+            writer.writerow([
+                "bus_id",
+                "stop_id",
+                "arrival_s",
+                "departure_s",
+                "dwell_s",
+                "headway_s",
+            ])
+            metrics_file.flush()
+
+            while traci.simulation.getMinExpectedNumber() > 0:
+                if traffic_enabled:
+                    spawn_passenger_car(step)
+
+                update_passenger_demand()
+                handle_bus_boarding(step)
+                manage_bus_indicators_and_priority()
+
+                traci.simulationStep()
+                step += 1
+
+                record_stop_metrics(writer, active_stops, last_departure)
+                metrics_file.flush()
     except traci.exceptions.FatalTraCIError:
         print("SUMO-GUI bezárva.")
     finally:
@@ -327,6 +383,5 @@ def main():
             traci.close()
         except Exception:
             pass
-
 if __name__ == "__main__":
     main()
