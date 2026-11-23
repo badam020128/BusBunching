@@ -22,6 +22,7 @@ def main():
         action="store_true",
         help="A szabályozott futás CSV-jét használja.",
     )
+    parser.add_argument("--holding", action="store_true")
     args = parser.parse_args()
 
     stop_number = args.stop.removeprefix("stop_")
@@ -29,7 +30,7 @@ def main():
         parser.error("A megálló száma 0 és 7 közé essen.")
     stop_id = f"stop_{stop_number}"
 
-    suffix = "_control" if args.control else ""
+    suffix = ("_control" if args.control else "") + ("_holding" if args.holding else "")
     csv_name = f"stop_metrics_{args.traffic_mode}{suffix}.csv"
     csv_path = Path(__file__).resolve().with_name(csv_name)
 
@@ -52,6 +53,8 @@ def main():
     ]
 
     control_label = "szabályozott" if args.control else "szabályozás nélkül"
+    if args.holding:
+        control_label += " + megállói várakoztatás"
     fig, ax = plt.subplots(figsize=(10, 5))
     ax.plot(departures[1:], headways, marker="o", markersize=4)
     ax.set_title(f"Buszok indulási időköze – {stop_id} ({args.traffic_mode}, {control_label})")

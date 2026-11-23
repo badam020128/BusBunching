@@ -130,7 +130,7 @@ def calculate_dwell_time(passenger_count, alighting_count=0):
 # Követjük, hogy melyik busz melyik megállóját konfiguráltuk már
 bus_configured_stops = {f"bus_{i}": None for i in range(NUM_BUSES)}
 
-def handle_bus_boarding(step):
+def handle_bus_boarding(step, pending_holds):
     """
     Amikor a busz belép az öbölbe, először leszállnak az utasok, utána felszállnak a várakozók
     és ezek alapján beállítjuk a pontos várakozási időt, mielőtt még megállna a busz.
@@ -166,9 +166,12 @@ def handle_bus_boarding(step):
                 traci.vehicle.setBusStop(
                     vehID=bus_id,
                     stopID=stop_id,
-                    duration=dwell,
-                    flags=0
+                    duration=dwell if pending_holds is None else 86400.0,
+                    flags=0,
                 )
+
+                if pending_holds is not None:
+                    pending_holds[bus_id] = dwell
                 # Meghatározzuk hányan vannak a buszon
 
                 print(f"[{step}s] {bus_id} érkezik ide: {stop_id} | Leszálló utasok: {alighting} fő | "
@@ -346,6 +349,27 @@ def control_bus_speeds(speed_writer):
 
         traci.vehicle.setSpeed(bus_id, target_speed)
 
+def release_held_buses(active_stops, last_departure, pending_holds):
+    min_headway_s = 55.0
+    now = traci.simulation.getTime()
+    released_stops = set()
+
+    for bus_id, (stop_id, arrival_time) in active_stops.items():
+        dwell = pending_holds.get(bus_id)
+        if dwell is None or stop_id in released_stops:
+            continue
+
+        if now < arrival_time + dwell:
+            continue
+
+        previous_departure = last_departure.get(stop_id)
+        if previous_departure is not None and now < previous_departure + min_headway_s:
+            continue
+
+        traci.vehicle.resume(bus_id)
+        del pending_holds[bus_id]
+        released_stops.add(stop_id)
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -358,6 +382,7 @@ def main():
     parser.add_argument("--control", action="store_true")
     parser.add_argument("--seed", type=int, default=42)
     parser.add_argument("--duration", type=int, default=3500, help="Futási idő másodpercben.")
+    parser.add_argument("--holding", action="store_true")
     args = parser.parse_args()
     if args.duration <= 0:
         parser.error("A futási időnek pozitívnak kell lennie.")
@@ -423,9 +448,10 @@ def main():
     step = 0
     active_stops = {}
     last_departure = {}
-    suffix = "_control" if args.control else ""
+    pending_holds = {} if args.holding else None
+    suffix = ("_control" if args.control else "") + ("_holding" if args.holding else "")
     metrics_path = f"stop_metrics_{args.traffic_mode}{suffix}.csv"
-
+    
     try:
         with ExitStack() as files:
             metrics_file = files.enter_context(
@@ -443,7 +469,7 @@ def main():
             metrics_file.flush()
 
             if args.control:
-                speed_path = f"speed_metrics_{args.traffic_mode}_control.csv"
+                speed_path = f"speed_metrics_{args.traffic_mode}{suffix}.csv"
                 speed_file = files.enter_context(
                     open(speed_path, "w", newline="", encoding="utf-8")
                 )
@@ -466,7 +492,11 @@ def main():
                     spawn_passenger_car(step)
 
                 update_passenger_demand()
-                handle_bus_boarding(step)
+                handle_bus_boarding(step, pending_holds)
+
+                if pending_holds is not None:
+                    release_held_buses(active_stops, last_departure, pending_holds)
+
                 manage_bus_indicators_and_priority()
 
                 if args.control:
