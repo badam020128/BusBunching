@@ -1,0 +1,31 @@
+# BusBunching – Run Commands
+
+Run both commands from the repository root. Arguments in square brackets are optional.
+
+## 1. Run the simulation
+
+python run_simulation.py [traffic|notraffic] [--control] [--holding] [--seed N] [--duration S]
+
+- `traffic` — Includes passenger cars. This is the default.
+- `notraffic` — Runs the simulation with buses only.
+- `--control` — Enables bus speed control.
+- `--holding` — Enables stop holding to enforce a minimum departure headway of 55 seconds.
+- `--seed N` — Sets the random seed. Default: `42`.
+- `--duration S` — Sets the maximum simulation duration in seconds. Default: `3500`.
+
+example:
+python run_simulation.py notraffic --control --holding
+
+## 2. Plot departure headways
+
+python plot_headway.py [traffic|notraffic] [stop] [--control] [--holding]
+
+- `traffic` / `notraffic` — Selects the traffic mode of the simulation results. Default: `traffic`.
+- `stop` — Selects a stop from `0` to `7`. Both `3` and `stop_3` select the same stop. Default: `0`.
+- `--control` — Selects results from a run with bus speed control.
+- `--holding` — Selects results from a run with stop holding.
+
+example:
+python plot_headway.py notraffic 0 --control --holding
+
+Use the same traffic mode and control flags for the simulation and the plot. The `--` flags can appear in any order. Keep each value directly after its flag, and put the traffic mode before the stop index.
