@@ -2,6 +2,7 @@ import traci
 import random
 import argparse
 import csv
+import math
 
 # ==========================================
 # BEÁLLÍTÁSOK
@@ -285,6 +286,49 @@ def record_stop_metrics(writer, active_stops, last_departure):
         ])
         last_departure[stop_id] = now
 
+def control_bus_speeds():
+    ring_center = 500.0
+    ring_radius = 500.0
+    ring_length = math.tau * ring_radius
+
+    cruise_speed = 11.5  # m/s
+    min_target_speed = 6.0  # m/s
+    kp = 0.01  # (m/s) / m
+
+    buses = []
+    for bus_id in traci.vehicle.getIDList():
+        if bus_id.startswith("bus_"):
+            x, y = traci.vehicle.getPosition(bus_id)
+            angle = math.atan2(y - ring_center, x - ring_center)
+            progress = (angle % math.tau) * ring_radius
+            buses.append((progress, bus_id))
+
+    buses.sort()
+    bus_positions = [progress for progress, _ in buses]
+
+    # A két szélső helyzethez is legyen szomszéd a kör átfordulásánál.
+    if buses:
+        bus_positions = [
+            bus_positions[-1] - ring_length,
+            *bus_positions,
+            bus_positions[0] + ring_length,
+        ]
+
+    for index, (progress, bus_id) in enumerate(buses, start=1):
+        edge = traci.vehicle.getRoadID(bus_id)
+        if len(buses) < 3 or not edge.startswith("e"):
+            traci.vehicle.setSpeed(bus_id, -1)
+            continue
+
+        front_gap = bus_positions[index + 1] - progress
+        rear_gap = progress - bus_positions[index - 1]
+
+        target_speed = cruise_speed + kp * (front_gap - rear_gap)
+        allowed_speed = traci.vehicle.getAllowedSpeed(bus_id)
+        target_speed = min(allowed_speed, max(min_target_speed, target_speed))
+
+        traci.vehicle.setSpeed(bus_id, target_speed)
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -294,7 +338,9 @@ def main():
         default="traffic",
         help="Személyautó-forgalom be- vagy kikapcsolása (alapértelmezés: traffic).",
     )
-    traffic_enabled = parser.parse_args().traffic_mode == "traffic"    
+    parser.add_argument("--control", action="store_true")
+    args = parser.parse_args()
+    traffic_enabled = args.traffic_mode == "traffic"  
     traci.start(SUMO_CMD)
 
     # 1. Járműtípusok
@@ -348,7 +394,8 @@ def main():
     step = 0
     active_stops = {}
     last_departure = {}
-    metrics_path = f"stop_metrics_{'traffic' if traffic_enabled else 'notraffic'}.csv"
+    suffix = "_control" if args.control else ""
+    metrics_path = f"stop_metrics_{args.traffic_mode}{suffix}.csv"
 
     try:
         with open(metrics_path, "w", newline="", encoding="utf-8") as metrics_file:
@@ -370,7 +417,8 @@ def main():
                 update_passenger_demand()
                 handle_bus_boarding(step)
                 manage_bus_indicators_and_priority()
-
+                if args.control:
+                    control_bus_speeds()
                 traci.simulationStep()
                 step += 1
 
