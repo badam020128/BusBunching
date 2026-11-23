@@ -1,5 +1,6 @@
 import traci
 import random
+import argparse
 
 # ==========================================
 # BEÁLLÍTÁSOK
@@ -249,6 +250,15 @@ def spawn_passenger_car(step):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "traffic_mode",
+        nargs="?",
+        choices=("traffic", "notraffic"),
+        default="traffic",
+        help="Személyautó-forgalom be- vagy kikapcsolása (alapértelmezés: traffic).",
+    )
+    traffic_enabled = parser.parse_args().traffic_mode == "traffic"    
     traci.start(SUMO_CMD)
 
     # 1. Járműtípusok
@@ -302,7 +312,8 @@ def main():
     step = 0
     try:
         while traci.simulation.getMinExpectedNumber() > 0:
-            spawn_passenger_car(step)
+            if traffic_enabled:
+                spawn_passenger_car(step)
             update_passenger_demand()
             handle_bus_boarding(step)
             manage_bus_indicators_and_priority()
