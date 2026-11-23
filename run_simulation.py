@@ -3,6 +3,7 @@ import random
 import argparse
 import csv
 import math
+from contextlib import ExitStack
 
 # ==========================================
 # BEÁLLÍTÁSOK
@@ -286,7 +287,7 @@ def record_stop_metrics(writer, active_stops, last_departure):
         ])
         last_departure[stop_id] = now
 
-def control_bus_speeds():
+def control_bus_speeds(speed_writer):
     ring_center = 500.0
     ring_radius = 500.0
     ring_length = math.tau * ring_radius
@@ -295,6 +296,7 @@ def control_bus_speeds():
     min_target_speed = 6.0  # m/s
     kp = 0.01  # (m/s) / m
 
+    now = traci.simulation.getTime()
     buses = []
     for bus_id in traci.vehicle.getIDList():
         if bus_id.startswith("bus_"):
@@ -323,9 +325,22 @@ def control_bus_speeds():
         front_gap = bus_positions[index + 1] - progress
         rear_gap = progress - bus_positions[index - 1]
 
-        target_speed = cruise_speed + kp * (front_gap - rear_gap)
+        raw_target = cruise_speed + kp * (front_gap - rear_gap)
         allowed_speed = traci.vehicle.getAllowedSpeed(bus_id)
-        target_speed = min(allowed_speed, max(min_target_speed, target_speed))
+        target_speed = min(allowed_speed, max(min_target_speed, raw_target))
+        actual_speed = traci.vehicle.getSpeed(bus_id)
+
+        speed_writer.writerow([
+            now,
+            bus_id,
+            edge,
+            round(front_gap, 2),
+            round(rear_gap, 2),
+            round(actual_speed, 3),
+            round(raw_target, 3),
+            round(target_speed, 3),
+            round(allowed_speed, 3),
+        ])
 
         traci.vehicle.setSpeed(bus_id, target_speed)
 
@@ -398,7 +413,10 @@ def main():
     metrics_path = f"stop_metrics_{args.traffic_mode}{suffix}.csv"
 
     try:
-        with open(metrics_path, "w", newline="", encoding="utf-8") as metrics_file:
+        with ExitStack() as files:
+            metrics_file = files.enter_context(
+                open(metrics_path, "w", newline="", encoding="utf-8")
+            )
             writer = csv.writer(metrics_file)
             writer.writerow([
                 "bus_id",
@@ -410,6 +428,25 @@ def main():
             ])
             metrics_file.flush()
 
+            if args.control:
+                speed_path = f"speed_metrics_{args.traffic_mode}_control.csv"
+                speed_file = files.enter_context(
+                    open(speed_path, "w", newline="", encoding="utf-8")
+                )
+                speed_writer = csv.writer(speed_file)
+                speed_writer.writerow([
+                    "time_s",
+                    "bus_id",
+                    "edge",
+                    "front_gap_m",
+                    "rear_gap_m",
+                    "actual_speed_mps",
+                    "raw_target_mps",
+                    "target_speed_mps",
+                    "allowed_speed_mps",
+                ])
+                speed_file.flush()
+
             while traci.simulation.getMinExpectedNumber() > 0:
                 if traffic_enabled:
                     spawn_passenger_car(step)
@@ -417,8 +454,11 @@ def main():
                 update_passenger_demand()
                 handle_bus_boarding(step)
                 manage_bus_indicators_and_priority()
+
                 if args.control:
-                    control_bus_speeds()
+                    control_bus_speeds(speed_writer)
+                    speed_file.flush()
+
                 traci.simulationStep()
                 step += 1
 
