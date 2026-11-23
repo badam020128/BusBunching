@@ -64,7 +64,9 @@ BUS_CAPACITY = 85
 PASSENGER_ARRIVAL_PROB = 0.15
 
 # Megállónként felhalmozódott utasok száma
-waiting_passengers = {stop: random.randint(2, 6) for stop in BUS_STOPS}
+passenger_arrival_rng = random.Random()
+passenger_service_rng = random.Random()
+waiting_passengers = {}
 
 # Buszok megállási állapotának követése {bus_id: {"handling_stop": stop_id, "done": bool}}
 bus_service_state = {}
@@ -92,7 +94,7 @@ def update_passenger_demand():
     """Minden időlépésben érkezhetnek új várakozó utasok, és frissül a GUI kijelzés."""
     for idx, stop_id in enumerate(BUS_STOPS):
         # Véletlenszerű érkezési folyamat (Poisson jellegű közelítés)
-        if random.random() < PASSENGER_ARRIVAL_PROB:
+        if passenger_arrival_rng.random() < PASSENGER_ARRIVAL_PROB:
             waiting_passengers[stop_id] += 1
 
         count = waiting_passengers[stop_id]
@@ -119,7 +121,7 @@ def calculate_dwell_time(passenger_count, alighting_count=0):
     door_time = 3.0
     boarding_rate = 1.2  # másodperc/utas
     alighting_rate = 0.8 # másodperc/leszálló
-    random_noise = random.uniform(-1.5, 2.5)
+    random_noise = passenger_service_rng.uniform(-1.5, 2.5)
      
     total_time = door_time + (passenger_count * boarding_rate) + (alighting_rate * alighting_count) + random_noise
     return max(4.0, round(total_time, 1))
@@ -148,7 +150,7 @@ def handle_bus_boarding(step):
             if bus_configured_stops[bus_id] != stop_id:
                 # leszállás
                 alighting = sum(1 for _ in range(bus_passengers[bus_id])
-                                if random.random() < ALIGHT_PROB)
+                                if passenger_service_rng.random() < ALIGHT_PROB)
                 bus_passengers[bus_id] -= alighting
                 
                 # felszállás
@@ -354,8 +356,20 @@ def main():
         help="Személyautó-forgalom be- vagy kikapcsolása (alapértelmezés: traffic).",
     )
     parser.add_argument("--control", action="store_true")
+    parser.add_argument("--seed", type=int, default=42)
+    parser.add_argument("--duration", type=int, default=3500, help="Futási idő másodpercben.")
     args = parser.parse_args()
-    traffic_enabled = args.traffic_mode == "traffic"  
+    if args.duration <= 0:
+        parser.error("A futási időnek pozitívnak kell lennie.")
+
+    random.seed(args.seed)
+    passenger_arrival_rng.seed(args.seed)
+    passenger_service_rng.seed(args.seed + 1)
+
+    waiting_passengers.clear()
+    waiting_passengers.update(
+        {stop_id: passenger_arrival_rng.randint(2, 6) for stop_id in BUS_STOPS}
+    )
     traci.start(SUMO_CMD)
 
     # 1. Járműtípusok
@@ -447,8 +461,8 @@ def main():
                 ])
                 speed_file.flush()
 
-            while traci.simulation.getMinExpectedNumber() > 0:
-                if traffic_enabled:
+            while step < args.duration and traci.simulation.getMinExpectedNumber() > 0:
+                if args.traffic_mode == "traffic":
                     spawn_passenger_car(step)
 
                 update_passenger_demand()
