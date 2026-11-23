@@ -47,7 +47,8 @@ BUS_LAP_EDGES = [
 ]
 
 SIGNAL_OFF = 0
-SIGNAL_BLINKER_LEFT = 1
+SIGNAL_BLINKER_LEFT = 2
+buses_that_stopped_in_bay = set()
 NUM_BUSES = 8
 MAX_NUMBER = 300 # Maximum jármű szám a szimulációban
 ALIGHT_PROB = 0.33 # Leszállás esélye
@@ -191,9 +192,11 @@ def manage_bus_indicators_and_priority():
                 pos = traci.vehicle.getLanePosition(v_id)
                 stop_state = traci.vehicle.getStopState(v_id)
                 is_at_stop = bool(stop_state & 1)
+                if is_at_stop:
+                    buses_that_stopped_in_bay.add(v_id)
 
                 # Ha a megállási idő letelt (már nem áll) és indul a csatlakozáshoz
-                if not is_at_stop and pos > 15.0:
+                if v_id in buses_that_stopped_in_bay and not is_at_stop:
                     traci.vehicle.setSignals(v_id, SIGNAL_BLINKER_LEFT)
                     blinking_bus_found = True
                 else:
@@ -202,6 +205,7 @@ def manage_bus_indicators_and_priority():
         post_edge = f"e{bus_idx}_2"
         for v_id in traci.edge.getLastStepVehicleIDs(post_edge):
             if "bus" in v_id:
+                buses_that_stopped_in_bay.discard(v_id)
                 traci.vehicle.setSignals(v_id, SIGNAL_OFF)
 
         if blinking_bus_found:
